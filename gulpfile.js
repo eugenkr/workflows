@@ -13,6 +13,7 @@ var connect = require('gulp-connect');
 var coffeeSource = ['components/coffee/*.coffee'];
 var jsSource = ['components/scripts/*.js'];
 var sassSource = ['components/sass/style.scss'];
+var htmlSource = ['builds/development/*.html'];
 
 gulp.task('coffee', function () {
     gulp.src(coffeeSource)
@@ -45,6 +46,8 @@ gulp.task('watch', function () {
     gulp.watch(coffeeSource, ['coffee']);
     gulp.watch(jsSource, ['js']);
     gulp.watch('components/sass/*.scss', ['compass']);
+    gulp.watch(htmlSource, ['html']);
+    gulp.watch('builds/development/js/*.json', ['json']);
 });
 
 gulp.task('connect', function () {
@@ -54,5 +57,15 @@ gulp.task('connect', function () {
     });
 });
 
+gulp.task('html', function () {
+    gulp.src(htmlSource)
+        .pipe(connect.reload());
+});
+
+gulp.task('json', function () {
+    gulp.src('builds/development/js/*.json')
+        .pipe(connect.reload());
+});
+
 // will be run by gulp command without params
-gulp.task('default', ['coffee', 'js', 'compass', 'connect', 'watch']);
+gulp.task('default', ['html', 'json', 'coffee', 'js', 'compass', 'connect', 'watch']);
